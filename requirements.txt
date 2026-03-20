@@ -1,0 +1,12 @@
+ultralytics
+opencv-python
+pyserial
+fastapi
+uvicorn
+pydantic
+requests
+streamlit
+pandas
+plotly
+google-generativeai
+numpy

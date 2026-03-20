@@ -1,55 +1,55 @@
-# Adaptive Traffic Signal Control
+# 🚦 AI-Traffic: The Smart City Orchestrator
 
-This repository contains a single Python script that implements an adaptive traffic signal controller using YOLOv8 for vehicle detection and an Arduino HC-05 Bluetooth module for signaling (or Simulation Mode when hardware isn't available).
+**Hackathon Edition: Redefining Urban Mobility with AI & Sustainability.**
 
-## Requirements
+AI-Traffic is not just a traffic light timer; it's a **Cognitive City Brain** that optimizes for life-saving speed, carbon neutrality, and human-centric safety.
 
-- Python 3.8+
-- Install dependencies (recommended in a virtual environment):
+## 🚀 Why This Wins
+Current systems are static or reactive. **AI-Traffic is proactive.**
+1. **The Guardian (Safety First):** Detects Ambulances/Fire Trucks using computer vision and forces a "Green Flush" for the emergency lane.
+2. **The Eco-Optimizer:** Reduces idling time, directly calculating and displaying CO2 savings in real-time.
+3. **The Cognitive Warden:** An LLM-powered (Gemini) interface that allows city officials to talk to their infrastructure.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+## 🛠️ Key Features
+- **YOLOv8 CV Engine:** Real-time multi-vehicle and pedestrian detection.
+- **Adaptive Priority Logic:** Dynamic signal timing that shifts green time to where it's needed most.
+- **V2X Simulation:** Simulation mode for hardware-free testing and demonstrations.
+- **Live Dashboards:** Professional-grade UI built with Streamlit and FastAPI.
+- **Hardware Ready:** Seamless integration with Arduino/ESP32 for physical signal control.
+
+## 🏗️ Project Structure
+```text
+src/
+├── core/
+│   ├── detection_engine.py # YOLOv8 & Emergency Logic
+│   ├── traffic_logic.py    # Priority-based switching
+│   └── eco_tracker.py      # CO2 Analytics
+├── comm/
+│   ├── arduino_bridge.py   # Serial/Simulation Comm
+│   └── api_server.py       # FastAPI Data Hub
+├── ui/
+│   └── dashboard.py        # Streamlit Smart City App
+└── utils/
+    └── gemini_helper.py    # LLM Warden Interface
 ```
 
-## Files
+## 🚥 Quick Start
+1. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. **Run the API Server:**
+   ```bash
+   python src/comm/api_server.py
+   ```
+3. **Run the AI Engine:**
+   ```bash
+   python main_app.py --sim
+   ```
+4. **Launch the Dashboard:**
+   ```bash
+   streamlit run src/ui/dashboard.py
+   ```
 
-- `adaptive_traffic_control.py` - main script
-- `requirements.txt` - Python dependencies
-
-## Usage
-
-Run the script and optionally set the COM port and device:
-
-```powershell
-python adaptive_traffic_control.py --com COM5 --source 0 --device cpu
-```
-
-Options:
-- `--com` : COM port for HC-05 (default: `COM5`). If opening the port fails the script runs in Simulation Mode.
-- `--source` : OpenCV video source index (default: `0` for the built-in webcam).
-- `--device` : Inference device, `cpu` or `cuda` (default: `cpu`). Use `cuda` if you have an NVIDIA GPU and ultralytics/PyTorch with CUDA enabled.
-
-Behavior:
-- The script will attempt to open the specified COM port at 9600 baud. If it fails, it runs in Simulation Mode and continues detecting and showing video.
-- Detections filter COCO classes: car (2), motorcycle (3), bus (5), truck (7).
-- Phase transitions:
-  - Start in RED.
-  - RED -> GREEN when minimum red time has passed and vehicle_count > 0. Sends 'g'.
-  - GREEN duration = min_green + 2 * vehicle_count, clamped to max_green (default 20s). Then send 'y'.
-  - YELLOW lasts 3 seconds, then send 'r' and return to RED.
-
-Press `q` in the video window to quit.
-
-## Notes
-
-- Ensure `yolov8n.pt` is available; the ultralytics package will download it automatically if needed (internet required the first run).
-- If using a real HC-05 Bluetooth module paired to a Windows COM port, specify the COM port with `--com`.
-- The script processes frames from the webcam (`--source 0`) and overlays bounding boxes, phase and vehicle counts. It also displays FPS.
-- This project is intended as a laptop-side controller and demo; the Arduino must be programmed separately to respond to `'g'`,`'y'`,`'r'` characters.
-
-## Troubleshooting
-
-- If the video window does not open, try different `--source` indices (0,1,2...).
-- For GPU inference (faster), install a CUDA-enabled PyTorch and run with `--device cuda`.
+## 🌍 The Mission
+To reduce global urban emissions by 15% and emergency response times by 30% using localized, cost-effective AI edge solutions.
