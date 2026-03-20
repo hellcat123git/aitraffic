@@ -38,17 +38,9 @@ src/
    ```bash
    pip install -r requirements.txt
    ```
-2. **Run the API Server:**
+2. **Run the Master Launcher:**
    ```bash
-   python src/comm/api_server.py
-   ```
-3. **Run the AI Engine:**
-   ```bash
-   python main_app.py --sim
-   ```
-4. **Launch the Dashboard:**
-   ```bash
-   streamlit run src/ui/dashboard.py
+   python launch_smart_city.bat
    ```
 
 ## 🌍 The Mission
