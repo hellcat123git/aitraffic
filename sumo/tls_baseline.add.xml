@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AI-Traffic SUMO Scenario — Fixed-Time Traffic Light Additional File
+
+  This file defines a pre-timed 4-phase TLS program for the CENTER junction.
+  Used ONLY in --baseline mode (TraCI does NOT override the TLS in that mode).
+  In AI-Driven mode, SumoEngine.apply_signal() uses TraCI to override this.
+
+  Phase layout (12 links = 3 lanes × 4 approaches):
+    Links 0-2  : N inbound lanes (straight, left, right)
+    Links 3-5  : S inbound lanes (straight, left, right)
+    Links 6-8  : E inbound lanes (straight, left, right)
+    Links 9-11 : W inbound lanes (straight, left, right)
+
+  Cycle time: 78 s  (35s green + 4s yellow per axis, industry-typical)
+-->
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+
+    <tlLogic id="center"
+             type="static"
+             programID="baseline_pretimed"
+             offset="0">
+
+        <!-- Phase 0: North/South GREEN, East/West RED — 35 seconds -->
+        <phase duration="35" state="GGGrrrGGGrrr"/>
+
+        <!-- Phase 1: North/South YELLOW, East/West RED — 4 seconds -->
+        <phase duration="4"  state="yyyrrryyyrrr"/>
+
+        <!-- Phase 2: East/West GREEN, North/South RED — 35 seconds -->
+        <phase duration="35" state="rrrGGGrrrGGG"/>
+
+        <!-- Phase 3: East/West YELLOW, North/South RED — 4 seconds -->
+        <phase duration="4"  state="rrryyyrrryyy"/>
+
+    </tlLogic>
+
+</additional>

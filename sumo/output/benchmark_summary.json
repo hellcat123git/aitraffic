@@ -1,0 +1,11 @@
+{
+  "steps_run": 833,
+  "baseline_co2_mg": 45460648.49,
+  "ai_co2_mg": 40378755.62,
+  "co2_improvement_pct": 11.18,
+  "baseline_avg_wait_s": 11.051,
+  "ai_avg_wait_s": 4.668,
+  "wait_improvement_pct": 57.76,
+  "ai_evp_response_s": 9.0,
+  "baseline_evp_response_s": 18.0
+}

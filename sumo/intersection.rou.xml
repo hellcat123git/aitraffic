@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AI-Traffic SUMO Scenario — Route & Vehicle Demand Definition
+
+  Contains:
+    1. Vehicle type definitions (car, truck, bus, emergency_car)
+    2. Named routes for all 12 through-movements + U-turns
+    3. Continuous traffic flows (both Baseline and AI-Driven use the same demand)
+    4. Pre-scheduled emergency vehicle (amb_001) at t=120s
+       + emergency route for programmatic injection (SumoEngine.inject_emergency)
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+
+    <!-- ================================================================
+         VEHICLE TYPE DEFINITIONS
+    ================================================================ -->
+
+    <!-- Standard passenger car -->
+    <vType id="car"
+           vClass="passenger"
+           color="1,0.8,0"
+           length="4.5"
+           width="1.8"
+           maxSpeed="13.89"
+           accel="2.6"
+           decel="4.5"
+           sigma="0.5"
+           tau="1.2"/>
+
+    <!-- Heavy goods truck -->
+    <vType id="truck"
+           vClass="truck"
+           color="0.6,0.6,0.6"
+           length="12.0"
+           width="2.5"
+           maxSpeed="11.11"
+           accel="1.5"
+           decel="3.5"
+           sigma="0.3"
+           tau="1.8"/>
+
+    <!-- City bus -->
+    <vType id="bus"
+           vClass="bus"
+           color="0.1,0.3,0.9"
+           length="12.0"
+           width="2.5"
+           maxSpeed="11.11"
+           accel="1.2"
+           decel="3.5"
+           sigma="0.3"
+           tau="1.8"/>
+
+    <!-- Emergency vehicle (ambulance / fire truck) -->
+    <vType id="emergency_car"
+           vClass="emergency"
+           color="1,0,0"
+           length="6.5"
+           width="2.1"
+           maxSpeed="25.0"
+           accel="4.0"
+           decel="6.0"
+           sigma="0.1"
+           tau="0.8"
+           speedFactor="1.5"
+           emergencyDecel="8.0"/>
+
+    <!-- ================================================================
+         NAMED ROUTES (through-movements at 4-way intersection)
+    ================================================================ -->
+
+    <!-- North ↔ South through movements -->
+    <route id="north_to_south" edges="north_in south_out"/>
+    <route id="south_to_north" edges="south_in north_out"/>
+
+    <!-- East ↔ West through movements -->
+    <route id="east_to_west"   edges="east_in  west_out"/>
+    <route id="west_to_east"   edges="west_in  east_out"/>
+
+    <!-- Cross movements (turning traffic) -->
+    <route id="north_to_east"  edges="north_in east_out"/>
+    <route id="north_to_west"  edges="north_in west_out"/>
+    <route id="south_to_east"  edges="south_in east_out"/>
+    <route id="south_to_west"  edges="south_in west_out"/>
+    <route id="east_to_north"  edges="east_in  north_out"/>
+    <route id="east_to_south"  edges="east_in  south_out"/>
+    <route id="west_to_north"  edges="west_in  north_out"/>
+    <route id="west_to_south"  edges="west_in  south_out"/>
+
+    <!-- ================================================================
+         TRAFFIC FLOWS
+         Same demand used for BOTH Baseline and AI-Driven runs (fair comparison).
+         Random seed is set in the .sumocfg so results are reproducible.
+    ================================================================ -->
+
+    <!-- North → South main flow (400 veh/hr cars) -->
+    <flow id="flow_north_south"
+          type="car"
+          route="north_to_south"
+          begin="0" end="3600"
+          vehsPerHour="400"
+          departLane="best"
+          departSpeed="max"/>
+
+    <!-- South → North main flow (400 veh/hr cars) -->
+    <flow id="flow_south_north"
+          type="car"
+          route="south_to_north"
+          begin="0" end="3600"
+          vehsPerHour="400"
+          departLane="best"
+          departSpeed="max"/>
+
+    <!-- East → West main flow (300 veh/hr cars) -->
+    <flow id="flow_east_west"
+          type="car"
+          route="east_to_west"
+          begin="0" end="3600"
+          vehsPerHour="300"
+          departLane="best"
+          departSpeed="max"/>
+
+    <!-- West → East main flow (300 veh/hr cars) -->
+    <flow id="flow_west_east"
+          type="car"
+          route="west_to_east"
+          begin="0" end="3600"
+          vehsPerHour="300"
+          departLane="best"
+          departSpeed="max"/>
+
+    <!-- Turning traffic (cross-flows, mixed types) -->
+    <flow id="flow_north_east_turn"
+          type="car"
+          route="north_to_east"
+          begin="0" end="3600"
+          vehsPerHour="80"
+          departLane="best"/>
+
+    <flow id="flow_south_west_turn"
+          type="car"
+          route="south_to_west"
+          begin="0" end="3600"
+          vehsPerHour="80"
+          departLane="best"/>
+
+    <!-- Freight trucks (west → east corridor) -->
+    <flow id="flow_trucks_we"
+          type="truck"
+          route="west_to_east"
+          begin="0" end="3600"
+          vehsPerHour="50"
+          departLane="best"/>
+
+    <!-- City buses (north → south transit line) -->
+    <flow id="flow_buses_ns"
+          type="bus"
+          route="north_to_south"
+          begin="0" end="3600"
+          vehsPerHour="60"
+          departLane="best"/>
+
+    <!-- ================================================================
+         EMERGENCY VEHICLE
+         Pre-scheduled: departs west → east at t=120s (after steady state).
+         SumoEngine.inject_emergency() can also inject one dynamically.
+    ================================================================ -->
+    <vehicle id="amb_001"
+             type="emergency_car"
+             route="west_to_east"
+             depart="120"
+             departLane="best"
+             departSpeed="max"
+             color="1,0,0"/>
+
+</routes>

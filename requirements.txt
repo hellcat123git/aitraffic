@@ -10,3 +10,4 @@ pandas
 plotly
 google-generativeai
 numpy
+traci

@@ -1,58 +1,59 @@
-# GEMINI.md - AI-Traffic: Smart City Orchestrator
+# GEMINI.md - Foundational Mandates & Project Blueprint
 
-This file serves as the core instructional context for the **AI-Traffic** project, an advanced, modular AI system designed for real-time urban traffic management and optimization.
+> [!IMPORTANT]
+> **Session Handover:** Upon starting a new chat, you MUST first read this file (`GEMINI.md`) for architectural mandates, followed immediately by `context/continuation.md` to synchronize with the latest project progress, completed tasks, and pending roadmap items.
 
-## 🚀 Project Overview
-**AI-Traffic** is a "Smart City Brain" developed for high-impact hackathon demonstrations. It goes beyond simple vehicle counting by integrating safety, sustainability, and generative AI into a single orchestrated platform.
-
-### Core Technologies
-- **Computer Vision:** YOLOv8 (ultralytics) for real-time object detection.
-- **Backend:** FastAPI for high-performance asynchronous data handling.
-- **Frontend:** Streamlit for a polished, interactive "Digital Twin" dashboard.
-- **Intelligence:** Google Gemini API for the "AI Traffic Warden" natural language interface.
-- **Hardware:** Serial communication with Arduino/ESP32 (with built-in simulation mode).
-
-### Architecture
-- `main_app.py`: The central orchestrator connecting vision, logic, and hardware.
-- `src/core/`: The "Brain" containing detection heuristics, adaptive traffic signal logic, and CO2 analytics.
-- `src/comm/`: The "Nervous System" handling internal API state and external hardware communication.
-- `src/ui/`: The "Face" of the project providing real-time visualization and analytics.
-- `src/utils/`: Support modules for LLM integration and helper functions.
+## Project Overview: AI-Traffic Smart City Orchestrator
+AI-Traffic is a modular, AI-driven traffic management system designed to optimize urban mobility, reduce CO2 emissions, and provide life-saving Emergency Vehicle Preemption (EVP). It bridges the gap between high-fidelity simulation (SUMO) and real-world edge execution (YOLOv8 + ESP32).
 
 ---
 
-## 🛠 Building and Running
+## 🏗️ Architectural Blueprint
 
-### Prerequisites
-- **Python 3.12 (Recommended):** Use the stable 3.12 release to ensure library compatibility.
-- **Dependencies:** Install via `pip install -r requirements.txt`.
+### 1. Sensing & Detection Layer (`src/core/`)
+- **`DetectionEngine` (YOLOv8)**: Real-time multi-vehicle/pedestrian counting from camera feeds. Features a unique HSV-based red-dominance heuristic for emergency vehicle detection on non-custom-trained models.
+- **`SumoEngine` (TraCI)**: High-fidelity simulation interface. Provides milligram-level CO2 tracking, proximity-based EVP sensors, and ground-truth wait-time metrics.
+- **`BaseEngine`**: The critical abstract interface ensuring `DetectionEngine` and `SumoEngine` are 100% hot-swappable.
 
-### Key Commands
-- **Master Launch:** `python run_smart_city.py` (Launches API, AI Engine, and Dashboard).
-- **Windows Launcher:** Double-click `launch_smart_city.bat`.
-- **Individual Components:**
-    - API Server: `python src/comm/api_server.py`
-    - AI Engine: `python main_app.py --sim`
-    - Dashboard: `streamlit run src/ui/dashboard.py`
+### 2. Logic & Decision Layer (`src/core/traffic_logic.py`)
+- **Adaptive Control**: A dynamic state machine implementing the **Indian 4-Phase (Split-Phasing)** standard (IRC:93-1985). It gives each approach (North, East, South, West) a dedicated green interval to handle heterogeneous traffic and safe right turns.
+- **Clearance Logic**: Every transition enforces a mandatory **Green -> Yellow -> All-Red** sequence for maximum intersection safety.
+- **Priority Green Wave (EVP)**: A safety-first override that grants immediate green lights to emergency vehicles, but strictly enforces a 4-second yellow clearance for cross-traffic to prevent real-world collisions.
 
----
+### 3. Analytics & Sustainability (`src/core/eco_tracker.py`)
+- **Carbon Accounting**: Tracks CO2 savings using both simulation-accurate data (mg) and scientifically robust VSP (Vehicle Specific Power) re-acceleration penalties (e.g., 0.045kg per stop-start).
+- **Benchmark Reports**: Generates side-by-side comparison data (AI vs. Baseline) calculating true Mean Delay per Vehicle for validated performance reporting.
 
-## 🚥 Key Features (Implemented)
-1. **The Guardian (Safety):** Immediate signal preemption for emergency vehicles (Ambulances/Fire Trucks) detected via CV.
-2. **The Eco-Optimizer (Sustainability):** Real-time CO2 savings calculator based on reduced idling time.
-3. **The Cognitive Warden (LLM):** A Gemini-powered chat interface in the dashboard for querying city-wide traffic stats.
-4. **Hardware-Agnostic:** Seamlessly switches between physical Arduino control and software simulation.
-
----
-
-## 📝 Development Conventions
-- **Modular Design:** Logic must be kept in `src/core/`. UI must not contain business logic; it should pull from the FastAPI `/data` endpoint.
-- **Simulation Mode:** Always provide a `--sim` or fallback path for hardware components to ensure the system is "demo-ready" in any environment.
-- **Safety Heuristics:** Emergency detection currently uses color-based heuristics (Red on heavy vehicles) for the demo, allowing for easy visual "wow" moments.
+### 4. Hardware & UI Layer
+- **ESP32 Integration**: Serial communication protocols (`experiments_and_tests/control_esp32.py`) for controlling physical traffic signal hardware, including a 1s 'OK' heartbeat watchdog.
+- **Next.js High-End Frontend (`frontend/`)**: A production-grade React 15 dashboard using a GPU-Native (Zustand + deck.gl) pipeline for high-frequency (10Hz+) traffic visualization. Features an Intelligent Bento Grid layout with Glassmorphism.
+- **Streamlit Dashboard**: A secondary Python-based dashboard for rapid testing and parallel benchmarking metrics.
 
 ---
 
-## 🔮 Future Roadmap (TODO)
-- [ ] **Wrong-Way Detection:** Implement vector tracking to identify vehicles driving against traffic flow.
-- [ ] **Automatic Fining System:** Capture snapshots of red-light violations and generate mock "Smart Challans."
-- [ ] **Digital Twin UI:** Upgrade Streamlit with isometric 3D maps or Three.js integrations.
+## 🛠️ Development & Tooling Mandates
+
+### External Tooling: Antigravity IDE (Google)
+- **Agent-First Workflows**: Use Antigravity's 'Mission Control' to delegate full-stack optimization tasks.
+- **Multi-Surface Execution**: Leverage the integrated Terminal (SUMO), Browser (Streamlit), and Editor to automate closed-loop testing of traffic algorithms.
+- **Recommended Skills**: 
+  - `computer-vision-expert` (YOLOv8 tuning)
+  - `traffic-logic-tester` (SUMO edge-case validation)
+  - `embedded-systems-pro` (ESP32/Serial HIL testing)
+
+### Core Coding Standards
+- **Interface Integrity**: Always maintain strict adherence to the `BaseEngine` abstract class when adding new sensing modules (e.g., LiDAR, Radar).
+- **Surgical Updates**: Prioritize focused, idiomatic changes. Avoid refactoring unrelated logic unless explicitly requested.
+- **Validation Protocol**: Every logic change MUST be validated against the `SumoEngine` benchmark before deployment to physical hardware.
+
+### Simulation Commands
+- **Build Network**: `python build_sumo_net.py`
+- **Run AI-Driven Mode**: `python main_app.py --mode sumo`
+- **Run Baseline Mode**: `python main_app.py --mode sumo --baseline`
+
+---
+
+## 🚦 Future Roadmap
+1. **Multi-Intersection Coordination**: Implementing "Green Waves" across networked intersections.
+2. **V2X Integration**: Incorporating connected vehicle data into the density estimation algorithm.
+3. **Advanced Pedestrian Safety**: Expanding logic to handle dedicated pedestrian phases based on dynamic crosswalk demand.

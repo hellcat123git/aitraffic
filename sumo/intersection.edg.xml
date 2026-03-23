@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AI-Traffic SUMO Scenario — Edge Definition
+  8 directed edges — one inbound and one outbound per approach arm.
+  3 lanes per edge, 50 km/h (13.89 m/s), priority 12.
+-->
+<edges xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/edges_file.xsd">
+
+    <!-- === North arm === -->
+    <edge id="north_in"  from="north"  to="center" numLanes="3" speed="13.89" priority="12"/>
+    <edge id="north_out" from="center" to="north"  numLanes="3" speed="13.89" priority="12"/>
+
+    <!-- === South arm === -->
+    <edge id="south_in"  from="south"  to="center" numLanes="3" speed="13.89" priority="12"/>
+    <edge id="south_out" from="center" to="south"  numLanes="3" speed="13.89" priority="12"/>
+
+    <!-- === East arm === -->
+    <edge id="east_in"  from="east"   to="center" numLanes="3" speed="13.89" priority="12"/>
+    <edge id="east_out" from="center" to="east"   numLanes="3" speed="13.89" priority="12"/>
+
+    <!-- === West arm (emergency vehicle approach) === -->
+    <edge id="west_in"  from="west"   to="center" numLanes="3" speed="13.89" priority="12"/>
+    <edge id="west_out" from="center" to="west"   numLanes="3" speed="13.89" priority="12"/>
+
+</edges>

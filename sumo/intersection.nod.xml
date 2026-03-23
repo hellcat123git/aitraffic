@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  AI-Traffic SUMO Scenario — Node Definition
+  5 nodes: one traffic-light-controlled center + 4 approach stubs (200m out)
+-->
+<nodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/nodes_file.xsd">
+
+    <!-- === Intersection center (traffic-light controlled) === -->
+    <node id="center" x="0"    y="0"    type="traffic_light"/>
+
+    <!-- === Approach stub nodes (200 m from center on each arm) === -->
+    <node id="north"  x="0"    y="200"  type="priority"/>
+    <node id="south"  x="0"    y="-200" type="priority"/>
+    <node id="east"   x="200"  y="0"    type="priority"/>
+    <node id="west"   x="-200" y="0"    type="priority"/>
+
+</nodes>
